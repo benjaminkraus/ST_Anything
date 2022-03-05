@@ -49,8 +49,8 @@ void setup()
   //Sensors
   bool initalState = false; // Start off not-present
   bool longIsPresent = false; // Long distance means not-present
-  unsigned long longThreshold = 8880; // 5 feet = 5*12*148 = 8880
-  unsigned long shortThreshold = 3552; // 2 feet = 2*12*148 = 3552
+  unsigned long longThreshold = 10656; // 6 feet = 6*12*148 = 10656
+  unsigned long shortThreshold = 7104; // 4 feet = 4*12*148 = 7104 
   static st::S_UltrasonicPresence sensor1(F("presence1"),
     PIN_ULTRASONIC_TRIG, PIN_ULTRASONIC_ECHO,
     initalState, longIsPresent, longThreshold, shortThreshold);
