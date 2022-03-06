@@ -6,13 +6,32 @@
 //              It inherits from the st::Sensor class.
 //
 //              Create an instance of this class in your sketch's global variable section
-//              For Example:  st::S_UltrasonicPresence sensor1(F("presence1"), PIN_ULTRASONIC_T, PIN_ULTRASONIC_E);
+//              For Example:
+//                  bool initalState = false; // Start off not-present
+//                  bool longIsPresent = false; // Long distance means not-present
+//                  unsigned long longThreshold = 10656; // 6 feet = 6*12*148 = 10656
+//                  unsigned long shortThreshold = 7104; // 4 feet = 4*12*148 = 7104
+//                  static st::S_UltrasonicPresence sensor1(F("presence1"),
+//                      PIN_ULTRASONIC_TRIG, PIN_ULTRASONIC_ECHO,
+//                      initalState, longIsPresent, longThreshold, shortThreshold);
 //
 //              st::S_UltrasonicPresence() constructor requires the following arguments
 //                - String &name - REQUIRED - the name of the object - must start with "presence".
 //                - byte digitalTriggerPin - REQUIRED - the Arduino Pin to be used as a digital output to trigger ultrasonic
 //                - byte digitalEchoPin - REQUIRED - the Arduino Pin to be used as a digital input to read the echo
+//                - bool initalState - REQUIRED - the initial state of the presence detector (true = present)
+//                - bool longIsPresent - REQUIRED - the method to convert from distance to presence
+//                                                  true mean a long distance is considered present
+//                                                  false means a short distance is considered present
+//                - unsigned long longThreshold - REQUIRED - the threshold in microseconds considered a "long distance"
+//                - unsigned long shortThreshold - REQUIRED - the threshold in microseconds considered a "short distance"
 //
+//              Calculating the threshold
+//                The threshold is based on the amount of time it takes for the ultrasonic signal to leave the transmitter,
+//                bounce off the target, and return to the receiver, which is based on the speed of sound.
+//                From the HC-SR04 documentation, to convert from centimeters or inches to microseconds, use these equations:
+//                    time (uS) = distance from sensor (cm) * 58 uS/cm
+//                    time (uS) = distance from sensor (inches) * 148 uS/inch
 //
 //  Change History:
 //
