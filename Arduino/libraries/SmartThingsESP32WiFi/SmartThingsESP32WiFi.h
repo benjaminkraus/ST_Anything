@@ -6,10 +6,10 @@
 //
 //	History
 //	2017-08-15  Dan Ogorchock  Created with the help of Joshua Spain
-//  2017-09-05  Dan Ogorchock  Added automatic WiFi reconnect logic as ESP32 
+//  2017-09-05  Dan Ogorchock  Added automatic WiFi reconnect logic as ESP32
 //                             doesn't do this automatically currently
 //  2018-01-01  Dan Ogorchock  Added WiFi.RSSI() data collection
-//  2019-05-01  Dan Ogorchock  Changed max transmit rate from every 100ms to every 
+//  2019-05-01  Dan Ogorchock  Changed max transmit rate from every 100ms to every
 //                             500ms to prevent duplicate child devices
 //  2020-06-20  Dan Ogorchock  Add user selectable host name (repurposing the old shieldType variable)
 //
@@ -33,7 +33,7 @@ namespace st
 		//ESP32 WiFi Specific
 		char st_ssid[50];
 		char st_password[50];
-        static int disconnectCounter;	
+        static int disconnectCounter;
 		boolean st_preExistingConnection = false;
 		WiFiServer st_server; //server
 		WiFiClient st_client; //client
