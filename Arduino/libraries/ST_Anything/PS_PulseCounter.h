@@ -37,6 +37,8 @@
 //    2020-11-15  Dan Ogorchock  Prevent Refresh from sending data for this particular device.
 //    2021-04-12  Dan Ogorchock  Corrected data type for interrupt type to correct compiler error for Nano 33 IoT
 //    2021-06-14  Dan Ogorchock  Fixed for SAMD Architectures...again
+//    2023-01-25  Dan Ogorchock  Fixed for MKR 1010 (use PinStatus instead of int for inttype)
+//    2023-01-26  Dan Ogorchock  Fixed for SAMD Architecture boards versus all other boards
 //
 //
 //******************************************************************************************
@@ -61,13 +63,13 @@ namespace st
 
 		public:
 
-//#ifndef ARDUINO_ARCH_SAMD
-//			//constructor - called in your sketch's global variable declaration section
-//			PS_PulseCounter(const __FlashStringHelper *name, unsigned int interval, int offset, byte inputpin, PinStatus inttype, byte inputmode, float cnvslope, float cnvoffset);
-//#else
+#if defined(ARDUINO_ARCH_SAMD)
+			//constructor - called in your sketch's global variable declaration section
+			PS_PulseCounter(const __FlashStringHelper *name, unsigned int interval, int offset, byte inputpin, PinStatus inttype, byte inputmode, float cnvslope, float cnvoffset);
+#else
 			//constructor - called in your sketch's global variable declaration section
 			PS_PulseCounter(const __FlashStringHelper* name, unsigned int interval, int offset, byte inputpin,  int inttype, byte inputmode, float cnvslope, float cnvoffset);
-//#endif
+#endif
 			//destructor
 			virtual ~PS_PulseCounter();
 			
