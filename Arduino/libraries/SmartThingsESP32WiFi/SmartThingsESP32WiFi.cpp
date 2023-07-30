@@ -6,7 +6,7 @@
 //
 //	History
 //	2017-08-15  Dan Ogorchock  Created with the help of Joshua Spain
-//  2017-09-05  Dan Ogorchock  Added automatic WiFi reconnect logic as ESP32 
+//  2017-09-05  Dan Ogorchock  Added automatic WiFi reconnect logic as ESP32
 //                             doesn't do this automatically currently
 //  2018-01-01  Dan Ogorchock  Added WiFi.RSSI() data collection
 //  2018-01-06  Dan Ogorchock  Simplified the MAC address printout to prevent confusion
@@ -17,6 +17,7 @@
 //*******************************************************************************
 
 #include "SmartThingsESP32WiFi.h"
+#include <ArduinoOTA.h>
 
 namespace st
 {
@@ -192,6 +193,32 @@ namespace st
 		RSSIsendInterval = 5000;
 		previousMillis = millis() - RSSIsendInterval;
 
+		// Send OTA Updates
+		ArduinoOTA.setHostname(st_devicename);
+		ArduinoOTA.onStart([]() {
+			Serial.println("Start");
+		});
+		ArduinoOTA.onEnd([]() {
+			Serial.println("\nEnd");
+		});
+		ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+			Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+		});
+		ArduinoOTA.onError([](ota_error_t error) {
+			Serial.printf("Error[%u]: ", error);
+			if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+			else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+			else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+			else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+			else if (error == OTA_END_ERROR) Serial.println("End Failed");
+		});
+		ArduinoOTA.begin();
+		Serial.println("ArduinoOTA Ready");
+		Serial.print("IP address: ");
+		Serial.println(WiFi.localIP());
+		Serial.print("ArduionOTA Host Name: ");
+		Serial.println(ArduinoOTA.getHostname());
+		Serial.println();
 	}
 
 	//*****************************************************************************
@@ -199,6 +226,9 @@ namespace st
 	//*****************************************************************************
 	void SmartThingsESP32WiFi::run(void)
 	{
+
+		ArduinoOTA.handle();
+
 		String readString;
 		String tempString;
 		String strRSSI;
